@@ -1,5 +1,6 @@
 -- create_db.sql
 -- SAE23 database
+-- IUT Blagnac BUT R&T 2026
 
 CREATE DATABASE IF NOT EXISTS sae23;
 USE sae23;
