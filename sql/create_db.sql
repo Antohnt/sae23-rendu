@@ -127,9 +127,9 @@ FROM Salle s;
 
 
 
--- Insert user accounts
+-- Insert user accounts (passwords stored as MD5 hash)
 INSERT INTO Utilisateur (login, mot_de_passe, role, id_batiment) VALUES
-('admin', 'admin', 'admin', NULL),
-('gestionnaire_b', 'gestb', 'gestionnaire', 2),
-('gestionnaire_c', 'gestc', 'gestionnaire', 3),
-('gestionnaire_e', 'geste', 'gestionnaire', 4);
+('admin', MD5('admin'), 'admin', NULL),
+('gestionnaire_b', MD5('gestb'), 'gestionnaire', 2),
+('gestionnaire_c', MD5('gestc'), 'gestionnaire', 3),
+('gestionnaire_e', MD5('geste'), 'gestionnaire', 4);
