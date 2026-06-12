@@ -1,0 +1,60 @@
+# docker-compose.yml
+# L2/L3 - Docker stack for SAE 23: Mosquitto (MQTT broker), Node-RED, InfluxDB, Grafana
+# Run on CT 104 with: docker compose up -d
+
+version: "3.8"
+
+services:
+  # MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: sae23-mosquitto
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  # Time-series database
+  influxdb:
+    image: influxdb:1.8
+    container_name: sae23-influxdb
+    restart: always
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=sae23
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=sae23admin
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+
+  # Flow automation (MQTT -> InfluxDB)
+  nodered:
+    image: nodered/node-red:latest
+    container_name: sae23-nodered
+    restart: always
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./nodered/data:/data
+    environment:
+      - TZ=Europe/Paris
+
+  # Dashboard visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: sae23-grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=sae23admin
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
