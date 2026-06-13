@@ -104,6 +104,22 @@ form input[type="submit"]:hover {
     font-weight: bold;
 }
 
+.form-inline {
+    display: inline;
+}
+
+.table-jauges {
+    width: auto;
+    margin: 0 auto;
+    border: none;
+}
+
+.table-jauges td {
+    border: none;
+    padding: 10px;
+    text-align: center;
+}
+
 footer {
     margin-top: 40px;
     padding-top: 20px;

@@ -14,6 +14,7 @@ session_start();
     <nav>
         <a href="index.php">Accueil</a>
         <a href="consultation.php">Consultation</a>
+        <a href="graphiques.php">Graphiques</a>
         <a href="gestion.php">Gestion</a>
         <a href="admin.php">Administration</a>
         <a href="projet.php">Projet</a>

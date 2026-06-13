@@ -26,12 +26,14 @@ if ($_SESSION['role'] == 'gestionnaire' && isset($_SESSION['id_batiment'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion - SAE 23</title>
+    <meta http-equiv="refresh" content="60">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
         <a href="index.php">Accueil</a>
         <a href="consultation.php">Consultation</a>
+        <a href="graphiques.php">Graphiques</a>
         <a href="gestion.php">Gestion</a>
         <a href="admin.php">Administration</a>
         <a href="projet.php">Projet</a>

@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-// check login
-if (!isset($_SESSION['login'])) {
-    header("Location: connexion.php");
-    exit();
-}
-
 $connexion = mysqli_connect("localhost", "root", "sae23", "sae23");
 if (!$connexion) {
     echo "Erreur connexion base de donnees.";
@@ -19,12 +13,14 @@ if (!$connexion) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultation - SAE 23</title>
+    <meta http-equiv="refresh" content="60">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
         <a href="index.php">Accueil</a>
         <a href="consultation.php">Consultation</a>
+        <a href="graphiques.php">Graphiques</a>
         <a href="gestion.php">Gestion</a>
         <a href="admin.php">Administration</a>
         <a href="projet.php">Projet</a><?php if (isset($_SESSION['login'])) { ?>
