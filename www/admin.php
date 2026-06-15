@@ -102,12 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // add a user
     if ($action == 'ajout_utilisateur') {
         $login = mysqli_real_escape_string($connexion, $_POST['login']);
-        $mdp = mysqli_real_escape_string($connexion, $_POST['mot_de_passe']);
+        $mdp_md5 = md5($_POST['mot_de_passe']);
         $role = mysqli_real_escape_string($connexion, $_POST['role']);
         $id_batiment = !empty($_POST['id_batiment']) ? 0 + ($_POST['id_batiment']) : 'NULL';
 
         $requete = "INSERT INTO Utilisateur (login, mot_de_passe, role, id_batiment)
-                    VALUES ('$login', '$mdp', '$role', $id_batiment)";
+                    VALUES ('$login', '$mdp_md5', '$role', $id_batiment)";
         if (mysqli_query($connexion, $requete)) {
             $message = "Utilisateur ajoute.";
         } else {
@@ -158,6 +158,7 @@ while ($s = mysqli_fetch_assoc($salles)) {
     <nav>
         <a href="index.php">Accueil</a>
         <a href="consultation.php">Consultation</a>
+        <a href="graphiques.php">Graphiques</a>
         <a href="gestion.php">Gestion</a>
         <a href="admin.php">Administration</a>
         <a href="projet.php">Projet</a>

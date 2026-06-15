@@ -23,8 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $login = mysqli_real_escape_string($connexion, $login);
         $mdp = mysqli_real_escape_string($connexion, $mdp);
 
-        // check user
-        $requete = "SELECT * FROM Utilisateur WHERE login='$login' AND mot_de_passe='$mdp'";
+        // check user (md5 password)
+        $mdp_md5 = md5($mdp);
+        $requete = "SELECT * FROM Utilisateur WHERE login='$login' AND mot_de_passe='$mdp_md5'";
         $resultat = mysqli_query($connexion, $requete);
 
         if (mysqli_num_rows($resultat) == 1) {
@@ -54,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <nav>
         <a href="index.php">Accueil</a>
         <a href="consultation.php">Consultation</a>
+        <a href="graphiques.php">Graphiques</a>
         <a href="gestion.php">Gestion</a>
         <a href="admin.php">Administration</a>
         <a href="projet.php">Projet</a>
