@@ -1,0 +1,7 @@
+# crontab.txt
+# Crontab configuration for SAE23 MQTT data collection
+# Install on CT 104 with: crontab scripts/crontab.txt
+#
+# Runs every 10 minutes, aligned with sensor publishing frequency
+
+*/10 * * * * /opt/lampp/bin/php /home/sae23/usine/scripts/collecte_mesures.php >> /var/log/sae23-collecte.log 2>&1
