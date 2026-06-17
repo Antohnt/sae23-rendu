@@ -1,5 +1,4 @@
 <?php
-// Start session for navbar display (public page, no access restriction)
 session_start();
 ?>
 <!DOCTYPE html>
@@ -9,11 +8,110 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de projet - SAE 23</title>
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['gantt']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Task ID');
+            data.addColumn('string', 'Task Name');
+            data.addColumn('string', 'Resource');
+            data.addColumn('date', 'Start Date');
+            data.addColumn('date', 'End Date');
+            data.addColumn('number', 'Duration');
+            data.addColumn('number', 'Percent Complete');
+            data.addColumn('string', 'Dependencies');
+
+            data.addRows([
+                // LIVRABLE L1 - GANTT + Schema BD
+                ['L1_analyse', 'Analyse consignes + roadmap', 'Antonin',
+                    new Date(2026, 5, 2), new Date(2026, 5, 3), null, 100, null],
+                ['L1_gantt', 'Creation GANTT previsionnel', 'Antonin',
+                    new Date(2026, 5, 2), new Date(2026, 5, 3), null, 100, null],
+                ['L1_css', 'Maquette CSS du site', 'Madeleine',
+                    new Date(2026, 5, 2), new Date(2026, 5, 4), null, 100, null],
+                ['L1_sql', 'Conception schema SQL', 'Timothee',
+                    new Date(2026, 5, 2), new Date(2026, 5, 4), null, 100, null],
+                ['L1_vm', 'Installation VM + MySQL', 'Timothee',
+                    new Date(2026, 5, 3), new Date(2026, 5, 5), null, 100, null],
+                ['L1_html', 'Page accueil HTML', 'Madeleine',
+                    new Date(2026, 5, 4), new Date(2026, 5, 6), null, 100, null],
+                ['L1_import', 'Import SQL + capture PhpMyAdmin', 'Timothee',
+                    new Date(2026, 5, 5), new Date(2026, 5, 7), null, 100, 'L1_sql'],
+
+                // LIVRABLE L2/L3 - Node-RED + Grafana
+                ['L2_docker', 'Install Docker + conteneurs', 'Timothee',
+                    new Date(2026, 5, 8), new Date(2026, 5, 10), null, 100, null],
+                ['L2_nodered', 'Config flow Node-RED (MQTT vers InfluxDB)', 'Timothee',
+                    new Date(2026, 5, 10), new Date(2026, 5, 13), null, 100, 'L2_docker'],
+                ['L2_grafana', 'Dashboard Grafana (7 panels)', 'Antonin',
+                    new Date(2026, 5, 11), new Date(2026, 5, 14), null, 100, 'L2_docker'],
+                ['L2_admin', 'Page administration (CRUD)', 'Antonin',
+                    new Date(2026, 5, 8), new Date(2026, 5, 11), null, 100, null],
+                ['L2_consult', 'Page consultation (HTML/CSS)', 'Madeleine',
+                    new Date(2026, 5, 8), new Date(2026, 5, 11), null, 100, null],
+                ['L2_tableaux', 'Mise en forme tableaux', 'Madeleine',
+                    new Date(2026, 5, 11), new Date(2026, 5, 14), null, 100, 'L2_consult'],
+
+                // LIVRABLE L4 - Site web final
+                ['L4_collecte', 'Script collecte MQTT vers MySQL', 'Timothee',
+                    new Date(2026, 5, 15), new Date(2026, 5, 17), null, 100, null],
+                ['L4_crontab', 'Automatisation crontab', 'Timothee',
+                    new Date(2026, 5, 17), new Date(2026, 5, 18), null, 100, 'L4_collecte'],
+                ['L4_gestion', 'Page gestion (min/max/moy)', 'Timothee',
+                    new Date(2026, 5, 17), new Date(2026, 5, 19), null, 100, 'L4_collecte'],
+                ['L4_connexion', 'Page connexion + sessions PHP', 'Antonin',
+                    new Date(2026, 5, 15), new Date(2026, 5, 17), null, 100, null],
+                ['L4_secu', 'Securisation acces (sessions)', 'Antonin',
+                    new Date(2026, 5, 17), new Date(2026, 5, 18), null, 100, 'L4_connexion'],
+                ['L4_projet', 'Page gestion de projet (GANTT)', 'Madeleine',
+                    new Date(2026, 5, 15), new Date(2026, 5, 18), null, 100, null],
+                ['L4_css', 'CSS responsive + finitions', 'Madeleine',
+                    new Date(2026, 5, 18), new Date(2026, 5, 20), null, 100, 'L4_projet'],
+                ['L4_doc', 'Documentation code', 'Antonin',
+                    new Date(2026, 5, 19), new Date(2026, 5, 21), null, 100, 'L4_secu'],
+                ['L4_tests', 'Tests integration + corrections', 'Commun',
+                    new Date(2026, 5, 19), new Date(2026, 5, 21), null, 100, null],
+                ['L4_push', 'Push Github + verification', 'Commun',
+                    new Date(2026, 5, 21), new Date(2026, 5, 22), null, 100, 'L4_tests'],
+
+                // ORAL
+                ['O_slides', 'Preparation slides', 'Antonin',
+                    new Date(2026, 5, 22), new Date(2026, 5, 25), null, 0, null],
+                ['O_demo', 'Preparation demo technique', 'Timothee',
+                    new Date(2026, 5, 22), new Date(2026, 5, 25), null, 0, null],
+                ['O_oral', 'Preparation partie orale (site)', 'Madeleine',
+                    new Date(2026, 5, 22), new Date(2026, 5, 25), null, 0, null],
+                ['O_repet', 'Repetition orale', 'Commun',
+                    new Date(2026, 5, 25), new Date(2026, 5, 26), null, 0, 'O_slides,O_demo,O_oral'],
+                ['O_soutenance', 'SOUTENANCE ORALE', 'Commun',
+                    new Date(2026, 5, 26), new Date(2026, 5, 27), null, 0, 'O_repet']
+            ]);
+
+            var options = {
+                height: 800,
+                gantt: {
+                    trackHeight: 25,
+                    barCornerRadius: 3,
+                    labelStyle: {
+                        fontName: 'Arial',
+                        fontSize: 12
+                    }
+                }
+            };
+
+            var chart = new google.visualization.Gantt(document.getElementById('chart_gantt'));
+            chart.draw(data, options);
+        }
+    </script>
 </head>
 <body>
     <nav>
         <a href="index.php">Accueil</a>
         <a href="consultation.php">Consultation</a>
+        <a href="graphiques.php">Graphiques</a>
         <a href="gestion.php">Gestion</a>
         <a href="admin.php">Administration</a>
         <a href="projet.php">Projet</a>
@@ -37,89 +135,15 @@ session_start();
                 </tr>
             </thead>
             <tbody>
-                <tr><td>Antonin Marchand</td><td>Chef de projet</td></tr>
-                <tr><td>Timothee Jean-Pierre</td><td>Developpeur / Ouvrier</td></tr>
+                <tr><td>Antonin Marchand</td><td>Chef de projet / Developpeur</td></tr>
+                <tr><td>Timothee Jean-Pierre</td><td>Developpeur backend</td></tr>
+                <tr><td>Madeleine Nuadi</td><td>Developpeur frontend</td></tr>
             </tbody>
         </table>
 
-        <!-- GANTT -->
-        <h2>Diagramme de GANTT previsionnel</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Phase</th>
-                    <th>Tache</th>
-                    <th>Debut</th>
-                    <th>Fin</th>
-                    <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Phase 0</td>
-                    <td>Infrastructure (CT LXC, LAMPP, MySQL)</td>
-                    <td>02/06</td>
-                    <td>04/06</td>
-                    <td>Termine</td>
-                </tr>
-                <tr>
-                    <td>L1</td>
-                    <td>Schema BD + GANTT + preparation rendu</td>
-                    <td>02/06</td>
-                    <td>07/06</td>
-                    <td>Termine</td>
-                </tr>
-                <tr>
-                    <td>L2/L3</td>
-                    <td>Docker (Mosquitto, Node-RED, InfluxDB, Grafana)</td>
-                    <td>08/06</td>
-                    <td>09/06</td>
-                    <td>En cours</td>
-                </tr>
-                <tr>
-                    <td>L2/L3</td>
-                    <td>Flow Node-RED (MQTT vers InfluxDB)</td>
-                    <td>10/06</td>
-                    <td>11/06</td>
-                    <td>A faire</td>
-                </tr>
-                <tr>
-                    <td>L2/L3</td>
-                    <td>Dashboard Grafana (4 panels)</td>
-                    <td>12/06</td>
-                    <td>13/06</td>
-                    <td>A faire</td>
-                </tr>
-                <tr>
-                    <td>L4</td>
-                    <td>Pages web (consultation, gestion, admin, projet)</td>
-                    <td>15/06</td>
-                    <td>17/06</td>
-                    <td>Termine</td>
-                </tr>
-                <tr>
-                    <td>L4</td>
-                    <td>Script collecte MQTT -> MySQL + crontab</td>
-                    <td>18/06</td>
-                    <td>18/06</td>
-                    <td>Termine</td>
-                </tr>
-                <tr>
-                    <td>L4</td>
-                    <td>Tests, corrections, documentation</td>
-                    <td>19/06</td>
-                    <td>20/06</td>
-                    <td>A faire</td>
-                </tr>
-                <tr>
-                    <td>L4</td>
-                    <td>Rendu final + URL Github</td>
-                    <td>21/06</td>
-                    <td>21/06</td>
-                    <td>A faire</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- GANTT interactif -->
+        <h2>Diagramme de GANTT</h2>
+        <div id="chart_gantt"></div>
 
         <!-- Deliverables -->
         <h2>Livrables</h2>
@@ -142,14 +166,15 @@ session_start();
         <!-- Technical choices -->
         <h2>Choix techniques</h2>
         <ul>
-            <li>2 batiments : Batiment E et Batiment C</li>
-            <li>4 capteurs etudies : temperature E101, CO2 E101, temperature C101, humidite C101</li>
-            <li>Protocole MQTT pour la collecte (broker mqtt.iut-blagnac.fr)</li>
+            <li>4 batiments : A, B, C, E (30 salles equipees)</li>
+            <li>4 types de capteurs : temperature, humidite, CO2, luminosite</li>
+            <li>Protocole MQTT pour la collecte (broker mqtt.iut-blagnac.fr, port 8883 TLS)</li>
             <li>Stockage MySQL (5 tables : Batiment, Salle, Capteur, Mesure, Utilisateur)</li>
-            <li>Script PHP de collecte automatise via crontab</li>
+            <li>Script Bash de collecte automatise via crontab (toutes les 10 min)</li>
             <li>Sessions PHP pour la securisation des acces</li>
             <li>Docker pour les conteneurs (Mosquitto, Node-RED, InfluxDB, Grafana)</li>
             <li>Hebergement sur conteneur LXC Proxmox (CT 104)</li>
+            <li>Acces distant via Tailscale VPN</li>
         </ul>
 
         <h2>Architecture de la base de donnees</h2>
@@ -203,19 +228,29 @@ session_start();
                 <tr>
                     <td>03/06</td>
                     <td>Script install_lampp.sh : import SQL echoue</td>
-                    <td>sudo bash -c 'mysql ... < fichier'</td>
+                    <td>sudo bash -c 'mysql ... &lt; fichier'</td>
                 </tr>
                 <tr>
                     <td>03/06</td>
                     <td>Table Utilisateur non creee (FK constraint fails)</td>
                     <td>Reimport avec DELETE dans l'ordre correct</td>
                 </tr>
+                <tr>
+                    <td>09/06</td>
+                    <td>collecte_mesures.sh : retours chariot Windows (\r)</td>
+                    <td>sed -i "s/\r$//" sur le serveur</td>
+                </tr>
+                <tr>
+                    <td>09/06</td>
+                    <td>PhpMyAdmin : Popper.js manquant (bootstrap.bundle.min.js)</td>
+                    <td>Concatenation popper.min.js + bootstrap.bundle.js</td>
+                </tr>
             </tbody>
         </table>
 
         <footer>
             <p>SAE 23 - BUT R&T - IUT de Blagnac - 2026</p>
-            <p>Projet realise par Antonin Marchand et Timothee Jean-Pierre</p>
+            <p>Projet realise par Antonin Marchand, Timothee Jean-Pierre et Madeleine Nuadi</p>
         </footer>
     </div>
 </body>
