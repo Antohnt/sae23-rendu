@@ -1,15 +1,16 @@
 <?php
 session_start();
 
-// Users must be logged in to view consultation data
+// check login
 if (!isset($_SESSION['login'])) {
     header("Location: connexion.php");
     exit();
 }
 
-$connexion = mysqli_connect("localhost", "root", "", "sae23");
+$connexion = mysqli_connect("localhost", "root", "sae23", "sae23");
 if (!$connexion) {
-    die("Database connection error.");
+    echo "Erreur connexion base de donnees.";
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -51,7 +52,7 @@ if (!$connexion) {
             </thead>
             <tbody>
                 <?php
-                // Get the latest measurement for each sensor (subquery)
+                // last value for each
                 $requete = "SELECT
                     b.nom AS batiment,
                     s.nom AS salle,

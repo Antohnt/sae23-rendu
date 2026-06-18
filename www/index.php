@@ -1,5 +1,5 @@
 <?php
-// Start session for navbar (public home page, no access restriction)
+// start session
 session_start();
 ?>
 <!DOCTYPE html>
@@ -35,17 +35,17 @@ session_start();
         </p>
 
 <?php
-        // Connect to database for dynamic data
-        $connexion = mysqli_connect("localhost", "root", "", "sae23");
+        // open database
+        $connexion = mysqli_connect("localhost", "root", "sae23", "sae23");
 
-        // Query buildings with room count
+        // get buildings
         $requete_batiments = "SELECT b.nom, b.adresse, COUNT(s.id_salle) AS nb_salles
                               FROM Batiment b
                               LEFT JOIN Salle s ON b.id_batiment = s.id_batiment
                               GROUP BY b.id_batiment";
         $resultat_batiments = mysqli_query($connexion, $requete_batiments);
 
-        // Query rooms with sensors
+        // get rooms
         $requete_salles = "SELECT s.nom, s.etage, GROUP_CONCAT(DISTINCT c.type_capteur SEPARATOR ', ') AS capteurs
                             FROM Salle s
                             LEFT JOIN Capteur c ON s.id_salle = c.id_salle

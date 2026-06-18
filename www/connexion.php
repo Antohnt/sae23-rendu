@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Handle logout
+// disconnect
 if (isset($_GET['logout'])) {
     session_destroy();
     header("Location: index.php");
@@ -14,25 +14,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $login = $_POST['login'];
     $mdp = $_POST['mot_de_passe'];
 
-    $connexion = mysqli_connect("localhost", "root", "", "sae23");
+    $connexion = mysqli_connect("localhost", "root", "sae23", "sae23");
 
     if (!$connexion) {
         $erreur = "Erreur de connexion a la base de donnees.";
     } else {
-        // Secure against SQL injection
+        // clean input
         $login = mysqli_real_escape_string($connexion, $login);
         $mdp = mysqli_real_escape_string($connexion, $mdp);
 
-        // Check credentials in database
+        // check user
         $requete = "SELECT * FROM Utilisateur WHERE login='$login' AND mot_de_passe='$mdp'";
         $resultat = mysqli_query($connexion, $requete);
 
         if (mysqli_num_rows($resultat) == 1) {
-            $user = mysqli_fetch_assoc($resultat);
-            // Store user info in session
-            $_SESSION['login'] = $user['login'];
-            $_SESSION['role'] = $user['role'];
-            $_SESSION['id_batiment'] = $user['id_batiment'];
+            $utilisateur = mysqli_fetch_assoc($resultat);
+            // save session
+            $_SESSION['login'] = $utilisateur['login'];
+            $_SESSION['role'] = $utilisateur['role'];
+            $_SESSION['id_batiment'] = $utilisateur['id_batiment'];
             header("Location: index.php");
             exit();
         } else {
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1>Connexion</h1>
 
         <?php if ($erreur != "") { ?>
-            <p class="erreur"><?php echo $erreur; ?></p>
+            <p class="erreur"><?php echo htmlspecialchars($erreur); ?></p>
         <?php } ?>
 
         <form method="POST" action="connexion.php">

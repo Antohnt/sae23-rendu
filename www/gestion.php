@@ -1,22 +1,23 @@
 <?php
 session_start();
 
-// Access control: gestionnaire or admin only
+// check role
 if (!isset($_SESSION['login']) || ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'gestionnaire')) {
     header("Location: connexion.php");
     exit();
 }
 
-$connexion = mysqli_connect("localhost", "root", "", "sae23");
+$connexion = mysqli_connect("localhost", "root", "sae23", "sae23");
 if (!$connexion) {
-    die("Database connection error.");
+    echo "Erreur connexion base de donnees.";
+    exit();
 }
 
-// If gestionnaire, restrict to their building
-$restriction_batiment = "";
+// filter by building
+$filtre_batiment = "";
 if ($_SESSION['role'] == 'gestionnaire' && isset($_SESSION['id_batiment'])) {
-    $id_bat = intval($_SESSION['id_batiment']);
-    $restriction_batiment = "AND b.id_batiment = $id_bat";
+    $id_bat = 0 + ($_SESSION['id_batiment']);
+    $filtre_batiment = "AND b.id_batiment = $id_bat";
 }
 ?>
 <!DOCTYPE html>
@@ -61,7 +62,7 @@ if ($_SESSION['role'] == 'gestionnaire' && isset($_SESSION['id_batiment'])) {
             </thead>
             <tbody>
                 <?php
-                // Get min, max, avg per sensor
+                // stats for each sensor
                 $requete_stats = "SELECT
                     b.nom AS batiment,
                     s.nom AS salle,
@@ -70,13 +71,13 @@ if ($_SESSION['role'] == 'gestionnaire' && isset($_SESSION['id_batiment'])) {
                     c.unite,
                     MIN(m.valeur) AS min_val,
                     MAX(m.valeur) AS max_val,
-                    ROUND(AVG(m.valeur), 2) AS avg_val,
+                    AVG(m.valeur) AS avg_val,
                     COUNT(m.id_mesure) AS nb_mesures
                 FROM Capteur c
                 JOIN Salle s ON c.id_salle = s.id_salle
                 JOIN Batiment b ON s.id_batiment = b.id_batiment
                 LEFT JOIN Mesure m ON m.id_capteur = c.id_capteur
-                WHERE 1=1 $restriction_batiment
+                WHERE 1=1 $filtre_batiment
                 GROUP BY c.id_capteur
                 ORDER BY b.nom, s.nom, c.type_capteur";
 
@@ -92,7 +93,8 @@ if ($_SESSION['role'] == 'gestionnaire' && isset($_SESSION['id_batiment'])) {
                     if ($ligne['nb_mesures'] > 0) {
                         echo "<td>" . htmlspecialchars($ligne['min_val']) . " " . htmlspecialchars($ligne['unite']) . "</td>";
                         echo "<td>" . htmlspecialchars($ligne['max_val']) . " " . htmlspecialchars($ligne['unite']) . "</td>";
-                        echo "<td>" . htmlspecialchars($ligne['avg_val']) . " " . htmlspecialchars($ligne['unite']) . "</td>";
+                        $moy = floor($ligne['avg_val'] * 100) / 100;
+                        echo "<td>" . htmlspecialchars($moy) . " " . htmlspecialchars($ligne['unite']) . "</td>";
                         echo "<td>" . htmlspecialchars($ligne['nb_mesures']) . "</td>";
                     } else {
                         echo "<td colspan='4'>Aucune mesure</td>";
@@ -118,7 +120,7 @@ if ($_SESSION['role'] == 'gestionnaire' && isset($_SESSION['id_batiment'])) {
             </thead>
             <tbody>
                 <?php
-                // Get last 50 measurements
+                // last 50 measures
                 $requete_mesures = "SELECT
                     m.date_mesure,
                     m.heure_mesure,
@@ -131,7 +133,7 @@ if ($_SESSION['role'] == 'gestionnaire' && isset($_SESSION['id_batiment'])) {
                 JOIN Capteur c ON m.id_capteur = c.id_capteur
                 JOIN Salle s ON c.id_salle = s.id_salle
                 JOIN Batiment b ON s.id_batiment = b.id_batiment
-                WHERE 1=1 $restriction_batiment
+                WHERE 1=1 $filtre_batiment
                 ORDER BY m.date_mesure DESC, m.heure_mesure DESC
                 LIMIT 50";
 
