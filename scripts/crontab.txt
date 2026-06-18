@@ -4,4 +4,4 @@
 #
 # Runs every 10 minutes, aligned with sensor publishing frequency
 
-*/10 * * * * /opt/lampp/bin/php /home/sae23/usine/scripts/collecte_mesures.php >> /var/log/sae23-collecte.log 2>&1
+*/10 * * * * /bin/bash /home/sae23/usine/scripts/collecte_mesures.sh >> /var/log/sae23-collecte.log 2>&1

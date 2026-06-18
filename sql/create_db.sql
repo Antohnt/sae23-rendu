@@ -1,18 +1,18 @@
 -- create_db.sql
--- SAE23 database creation script
+-- SAE23 database
 
 CREATE DATABASE IF NOT EXISTS sae23;
 USE sae23;
 
 -- Building table
-CREATE TABLE Batiment (
+CREATE TABLE IF NOT EXISTS Batiment (
     id_batiment INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50) NOT NULL,
     adresse VARCHAR(255)
 );
 
 -- Room table
-CREATE TABLE Salle (
+CREATE TABLE IF NOT EXISTS Salle (
     id_salle INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50) NOT NULL,
     etage INT NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE Salle (
 );
 
 -- Sensor table
-CREATE TABLE Capteur (
+CREATE TABLE IF NOT EXISTS Capteur (
     id_capteur INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     type_capteur VARCHAR(50) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE Capteur (
 );
 
 -- Measurement table
-CREATE TABLE Mesure (
+CREATE TABLE IF NOT EXISTS Mesure (
     id_mesure INT AUTO_INCREMENT PRIMARY KEY,
     valeur FLOAT NOT NULL,
     date_mesure DATE NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE Mesure (
 );
 
 -- User table
-CREATE TABLE Utilisateur (
+CREATE TABLE IF NOT EXISTS Utilisateur (
     id_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
     login VARCHAR(50) NOT NULL UNIQUE,
     mot_de_passe VARCHAR(255) NOT NULL,
@@ -54,40 +54,82 @@ CREATE TABLE Utilisateur (
 
 -- Insert buildings
 INSERT INTO Batiment (nom, adresse) VALUES
-('Batiment E', 'IUT de Blagnac'),
-('Batiment C', 'IUT de Blagnac');
+('Batiment A', 'IUT de Blagnac'),
+('Batiment B', 'IUT de Blagnac'),
+('Batiment C', 'IUT de Blagnac'),
+('Batiment E', 'IUT de Blagnac');
 
--- Insert rooms for Building E
+-- Insert rooms Building A (id_batiment = 1)
 INSERT INTO Salle (nom, etage, type, capacite, id_batiment) VALUES
-('E101', 1, 'TP', 24, 1),
-('E102', 1, 'TP', 24, 1),
-('E103', 1, 'TP', 24, 1),
-('E105', 1, 'TD', 30, 1),
-('E206', 2, 'TP', 24, 1),
-('E207', 2, 'TP', 24, 1),
-('E208', 2, 'TD', 30, 1);
+('Salle-conseil', 1, 'Reunion', 20, 1);
 
--- Insert rooms for Building C
+-- Insert rooms Building B (id_batiment = 2)
 INSERT INTO Salle (nom, etage, type, capacite, id_batiment) VALUES
-('C101', 1, 'CM', 60, 2),
-('C102', 1, 'TD', 30, 2);
+('B001', 0, 'TD', 30, 2),
+('B101', 1, 'TP', 24, 2),
+('B102', 1, 'TP', 24, 2),
+('B103', 1, 'TP', 24, 2),
+('B105', 1, 'TP', 24, 2),
+('B106', 1, 'TP', 24, 2),
+('B109', 1, 'TP', 24, 2),
+('B110', 1, 'TP', 24, 2),
+('B111', 1, 'TP', 24, 2),
+('B201', 2, 'TD', 30, 2),
+('B202', 2, 'TD', 30, 2),
+('B203', 2, 'TD', 30, 2),
+('B212', 2, 'TD', 30, 2),
+('B234', 2, 'TD', 30, 2),
+('Foyer-personnels', 2, 'Commun', 40, 2),
+('Foyer-etudiants-entree', 0, 'Commun', 60, 2);
 
--- Insert sensors for Building E
-INSERT INTO Capteur (nom, type_capteur, unite, id_salle) VALUES
-('AM107-E101-temp', 'temperature', '°C', 1),
-('AM107-E101-co2', 'co2', 'ppm', 1),
-('AM107-E208-temp', 'temperature', '°C', 7),
-('AM107-E208-hum', 'humidity', '%', 7);
+-- Insert rooms Building C (id_batiment = 3)
+INSERT INTO Salle (nom, etage, type, capacite, id_batiment) VALUES
+('C001', 0, 'CM', 60, 3),
+('C002', 0, 'CM', 60, 3),
+('C004', 0, 'TD', 30, 3),
+('C006', 0, 'TD', 30, 3),
+('C101', 1, 'TD', 30, 3),
+('C102', 1, 'TD', 30, 3);
 
--- Insert sensors for Building C
-INSERT INTO Capteur (nom, type_capteur, unite, id_salle) VALUES
-('AM107-C101-temp', 'temperature', '°C', 8),
-('AM107-C101-co2', 'co2', 'ppm', 8),
-('AM107-C102-temp', 'temperature', '°C', 9),
-('AM107-C102-hum', 'humidity', '%', 9);
+-- Insert rooms Building E (id_batiment = 4)
+INSERT INTO Salle (nom, etage, type, capacite, id_batiment) VALUES
+('E001', 0, 'TD', 30, 4),
+('E003', 0, 'TD', 30, 4),
+('E006', 0, 'TD', 30, 4),
+('E007', 0, 'TP', 24, 4),
+('E100', 1, 'TP', 24, 4),
+('E104', 1, 'TP', 24, 4),
+('E105', 1, 'TP', 24, 4);
+
+-- Insert sensors (4 types per room = 4 x 30 = 120 sensors)
+-- Types: temperature, humidity, co2, illumination
+
+INSERT INTO Capteur (nom, type_capteur, unite, id_salle)
+SELECT
+    CONCAT('AM107-', s.nom, '-temp'), 'temperature', '°C', s.id_salle
+FROM Salle s;
+
+INSERT INTO Capteur (nom, type_capteur, unite, id_salle)
+SELECT
+    CONCAT('AM107-', s.nom, '-hum'), 'humidity', '%', s.id_salle
+FROM Salle s;
+
+INSERT INTO Capteur (nom, type_capteur, unite, id_salle)
+SELECT
+    CONCAT('AM107-', s.nom, '-co2'), 'co2', 'ppm', s.id_salle
+FROM Salle s;
+
+INSERT INTO Capteur (nom, type_capteur, unite, id_salle)
+SELECT
+    CONCAT('AM107-', s.nom, '-lum'), 'illumination', 'lux', s.id_salle
+FROM Salle s;
+
+
+
 
 -- Insert user accounts
 INSERT INTO Utilisateur (login, mot_de_passe, role, id_batiment) VALUES
 ('admin', 'admin', 'admin', NULL),
-('gestionnaire_e', 'geste', 'gestionnaire', 1),
-('gestionnaire_c', 'gestc', 'gestionnaire', 2);
+('gestionnaire_b', 'gestb', 'gestionnaire', 2),
+('gestionnaire_c', 'gestc', 'gestionnaire', 3),
+('gestionnaire_e', 'geste', 'gestionnaire', 4);
