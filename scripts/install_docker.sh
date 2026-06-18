@@ -4,6 +4,11 @@
 # Run from the usine/ project root with: bash scripts/install_docker.sh
 # Or from anywhere: the script detects its own location
 
+if grep -q $'\r' "$0"; then
+    sed -i 's/\r$//' "$0"
+    exec bash "$0" "$@"
+fi
+
 set -e
 
 # Detect the project root (parent of the scripts/ directory)
@@ -63,6 +68,15 @@ mkdir -p "$DOCKER_DIR/mosquitto/log"
 mkdir -p "$DOCKER_DIR/influxdb/data"
 mkdir -p "$DOCKER_DIR/nodered/data"
 mkdir -p "$DOCKER_DIR/grafana/data"
+# Container UIDs: Node-RED=1000, Grafana=472, Mosquitto=1883
+sudo chown -R 1000:1000 "$DOCKER_DIR/nodered/data" || true
+sudo chown -R 472:472 "$DOCKER_DIR/grafana/data" || true
+sudo chown -R 1883:1883 "$DOCKER_DIR/mosquitto/data" "$DOCKER_DIR/mosquitto/log" || true
+# Copy Node-RED flow before first start
+if [ -f "$DOCKER_DIR/nodered/flows.json" ]; then
+    cp -f "$DOCKER_DIR/nodered/flows.json" "$DOCKER_DIR/nodered/data/flows.json"
+    sudo chown 1000:1000 "$DOCKER_DIR/nodered/data/flows.json" || true
+fi
 echo "Directories created."
 
 # Verify required config files exist
@@ -136,7 +150,10 @@ echo ""
 echo "3. Import Grafana dashboard:"
 echo "   Create → Import → Upload dashboard.json from docker/grafana/"
 echo ""
-echo "4. Check logs if something is wrong:"
+echo "4. Run Grafana configuration:"
+echo "   bash scripts/configure_l2l3.sh"
+echo ""
+echo "5. Check logs if something is wrong:"
 echo "   sudo docker logs sae23-mosquitto"
 echo "   sudo docker logs sae23-influxdb"
 echo "   sudo docker logs sae23-nodered"

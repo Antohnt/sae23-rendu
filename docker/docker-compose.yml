@@ -31,7 +31,7 @@ services:
       - INFLUXDB_DB=sae23
       - INFLUXDB_ADMIN_USER=admin
       - INFLUXDB_ADMIN_PASSWORD=sae23admin
-      - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_HTTP_AUTH_ENABLED=false
 
   # Flow automation (MQTT -> InfluxDB)
   nodered:
@@ -44,6 +44,7 @@ services:
       - ./nodered/data:/data
     environment:
       - TZ=Europe/Paris
+      - NODE_RED_EXTRA_PACKAGES=node-red-contrib-influxdb
 
   # Dashboard visualization
   grafana:

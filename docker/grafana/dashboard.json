@@ -8,387 +8,188 @@
     "schemaVersion": 16,
     "version": 0,
     "refresh": "10s",
+    "templating": {
+      "list": [
+        {
+          "allValue": null,
+          "current": {},
+          "datasource": "InfluxDB",
+          "definition": "SHOW TAG VALUES FROM temperature WITH KEY = \"room\"",
+          "hide": 0,
+          "includeAll": true,
+          "multi": true,
+          "name": "room",
+          "query": "SHOW TAG VALUES FROM temperature WITH KEY = \"room\"",
+          "refresh": 1,
+          "type": "query",
+          "label": "Salle"
+        },
+        {
+          "allValue": null,
+          "current": {},
+          "datasource": "InfluxDB",
+          "definition": "SHOW TAG VALUES FROM temperature WITH KEY = \"building\"",
+          "hide": 0,
+          "includeAll": true,
+          "multi": true,
+          "name": "building",
+          "query": "SHOW TAG VALUES FROM temperature WITH KEY = \"building\"",
+          "refresh": 1,
+          "type": "query",
+          "label": "Batiment"
+        }
+      ]
+    },
     "panels": [
       {
         "id": 1,
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 0,
-          "y": 0
-        },
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
         "type": "graph",
-        "title": "Temperature - E101 (Batiment E)",
+        "title": "Temperature",
         "datasource": "InfluxDB",
         "targets": [
           {
             "groupBy": [
-              {
-                "params": ["$__interval"],
-                "type": "time"
-              },
-              {
-                "params": ["null"],
-                "type": "fill"
-              }
+              { "params": ["$__interval"], "type": "time" },
+              { "params": ["room"], "type": "tag" },
+              { "params": ["null"], "type": "fill" }
             ],
             "measurement": "temperature",
             "orderByTime": "ASC",
             "policy": "default",
             "refId": "A",
             "resultFormat": "time_series",
-            "select": [
-              [
-                {
-                  "params": ["value"],
-                  "type": "field"
-                },
-                {
-                  "params": [],
-                  "type": "mean"
-                }
-              ]
-            ],
+            "select": [[
+              { "params": ["value"], "type": "field" },
+              { "params": [], "type": "mean" }
+            ]],
             "tags": [
-              {
-                "key": "building",
-                "operator": "=",
-                "value": "E"
-              },
-              {
-                "key": "room",
-                "operator": "=",
-                "value": "E101"
-              }
+              { "key": "room", "operator": "=~", "value": "/^$room$/" },
+              { "condition": "AND", "key": "building", "operator": "=~", "value": "/^$building$/" }
             ]
           }
         ],
         "yaxes": [
-          {
-            "format": "celsius",
-            "label": "Temperature",
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": true
-          },
-          {
-            "format": "short",
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": false
-          }
+          { "format": "celsius", "label": "°C", "show": true },
+          { "format": "short", "show": false }
         ],
-        "xaxis": {
-          "show": true
-        },
         "lines": true,
         "linewidth": 2,
-        "nullPointMode": "connected",
-        "percentage": false,
-        "pointradius": 2,
-        "points": false,
-        "steppedLine": false,
-        "tooltip": {
-          "shared": true,
-          "value_type": "individual"
-        },
         "fill": 1,
-        "legend": {
-          "show": true,
-          "avg": true,
-          "max": true,
-          "min": true,
-          "values": true
-        }
+        "legend": { "show": true, "avg": true, "max": true, "min": true, "values": true }
       },
       {
         "id": 2,
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 12,
-          "y": 0
-        },
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
         "type": "graph",
-        "title": "CO2 - E101 (Batiment E)",
+        "title": "CO2",
         "datasource": "InfluxDB",
         "targets": [
           {
             "groupBy": [
-              {
-                "params": ["$__interval"],
-                "type": "time"
-              },
-              {
-                "params": ["null"],
-                "type": "fill"
-              }
+              { "params": ["$__interval"], "type": "time" },
+              { "params": ["room"], "type": "tag" },
+              { "params": ["null"], "type": "fill" }
             ],
             "measurement": "co2",
             "orderByTime": "ASC",
             "policy": "default",
             "refId": "A",
             "resultFormat": "time_series",
-            "select": [
-              [
-                {
-                  "params": ["value"],
-                  "type": "field"
-                },
-                {
-                  "params": [],
-                  "type": "mean"
-                }
-              ]
-            ],
+            "select": [[
+              { "params": ["value"], "type": "field" },
+              { "params": [], "type": "mean" }
+            ]],
             "tags": [
-              {
-                "key": "building",
-                "operator": "=",
-                "value": "E"
-              },
-              {
-                "key": "room",
-                "operator": "=",
-                "value": "E101"
-              }
+              { "key": "room", "operator": "=~", "value": "/^$room$/" },
+              { "condition": "AND", "key": "building", "operator": "=~", "value": "/^$building$/" }
             ]
           }
         ],
         "yaxes": [
-          {
-            "format": "ppm",
-            "label": "CO2",
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": true
-          },
-          {
-            "format": "short",
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": false
-          }
+          { "format": "ppm", "label": "ppm", "show": true },
+          { "format": "short", "show": false }
         ],
-        "xaxis": {
-          "show": true
-        },
         "lines": true,
         "linewidth": 2,
-        "nullPointMode": "connected",
-        "percentage": false,
-        "pointradius": 2,
-        "points": false,
-        "steppedLine": false,
-        "tooltip": {
-          "shared": true,
-          "value_type": "individual"
-        },
         "fill": 1,
-        "legend": {
-          "show": true,
-          "avg": true,
-          "max": true,
-          "min": true,
-          "values": true
-        }
+        "legend": { "show": true, "avg": true, "max": true, "min": true, "values": true }
       },
       {
         "id": 3,
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 0,
-          "y": 9
-        },
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
         "type": "graph",
-        "title": "Temperature - C101 (Batiment C)",
+        "title": "Humidite",
         "datasource": "InfluxDB",
         "targets": [
           {
             "groupBy": [
-              {
-                "params": ["$__interval"],
-                "type": "time"
-              },
-              {
-                "params": ["null"],
-                "type": "fill"
-              }
-            ],
-            "measurement": "temperature",
-            "orderByTime": "ASC",
-            "policy": "default",
-            "refId": "A",
-            "resultFormat": "time_series",
-            "select": [
-              [
-                {
-                  "params": ["value"],
-                  "type": "field"
-                },
-                {
-                  "params": [],
-                  "type": "mean"
-                }
-              ]
-            ],
-            "tags": [
-              {
-                "key": "building",
-                "operator": "=",
-                "value": "C"
-              },
-              {
-                "key": "room",
-                "operator": "=",
-                "value": "C101"
-              }
-            ]
-          }
-        ],
-        "yaxes": [
-          {
-            "format": "celsius",
-            "label": "Temperature",
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": true
-          },
-          {
-            "format": "short",
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": false
-          }
-        ],
-        "xaxis": {
-          "show": true
-        },
-        "lines": true,
-        "linewidth": 2,
-        "nullPointMode": "connected",
-        "percentage": false,
-        "pointradius": 2,
-        "points": false,
-        "steppedLine": false,
-        "tooltip": {
-          "shared": true,
-          "value_type": "individual"
-        },
-        "fill": 1,
-        "legend": {
-          "show": true,
-          "avg": true,
-          "max": true,
-          "min": true,
-          "values": true
-        }
-      },
-      {
-        "id": 4,
-        "gridPos": {
-          "h": 9,
-          "w": 12,
-          "x": 12,
-          "y": 9
-        },
-        "type": "graph",
-        "title": "Humidite - C101 (Batiment C)",
-        "datasource": "InfluxDB",
-        "targets": [
-          {
-            "groupBy": [
-              {
-                "params": ["$__interval"],
-                "type": "time"
-              },
-              {
-                "params": ["null"],
-                "type": "fill"
-              }
+              { "params": ["$__interval"], "type": "time" },
+              { "params": ["room"], "type": "tag" },
+              { "params": ["null"], "type": "fill" }
             ],
             "measurement": "humidity",
             "orderByTime": "ASC",
             "policy": "default",
             "refId": "A",
             "resultFormat": "time_series",
-            "select": [
-              [
-                {
-                  "params": ["value"],
-                  "type": "field"
-                },
-                {
-                  "params": [],
-                  "type": "mean"
-                }
-              ]
-            ],
+            "select": [[
+              { "params": ["value"], "type": "field" },
+              { "params": [], "type": "mean" }
+            ]],
             "tags": [
-              {
-                "key": "building",
-                "operator": "=",
-                "value": "C"
-              },
-              {
-                "key": "room",
-                "operator": "=",
-                "value": "C101"
-              }
+              { "key": "room", "operator": "=~", "value": "/^$room$/" },
+              { "condition": "AND", "key": "building", "operator": "=~", "value": "/^$building$/" }
             ]
           }
         ],
         "yaxes": [
-          {
-            "format": "percent",
-            "label": "Humidite",
-            "logBase": 1,
-            "max": 100,
-            "min": 0,
-            "show": true
-          },
-          {
-            "format": "short",
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": false
-          }
+          { "format": "percent", "label": "%", "min": 0, "max": 100, "show": true },
+          { "format": "short", "show": false }
         ],
-        "xaxis": {
-          "show": true
-        },
         "lines": true,
         "linewidth": 2,
-        "nullPointMode": "connected",
-        "percentage": false,
-        "pointradius": 2,
-        "points": false,
-        "steppedLine": false,
-        "tooltip": {
-          "shared": true,
-          "value_type": "individual"
-        },
         "fill": 1,
-        "legend": {
-          "show": true,
-          "avg": true,
-          "max": true,
-          "min": true,
-          "values": true
-        }
+        "legend": { "show": true, "avg": true, "max": true, "min": true, "values": true }
+      },
+      {
+        "id": 4,
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+        "type": "graph",
+        "title": "Luminosite",
+        "datasource": "InfluxDB",
+        "targets": [
+          {
+            "groupBy": [
+              { "params": ["$__interval"], "type": "time" },
+              { "params": ["room"], "type": "tag" },
+              { "params": ["null"], "type": "fill" }
+            ],
+            "measurement": "illumination",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [[
+              { "params": ["value"], "type": "field" },
+              { "params": [], "type": "mean" }
+            ]],
+            "tags": [
+              { "key": "room", "operator": "=~", "value": "/^$room$/" },
+              { "condition": "AND", "key": "building", "operator": "=~", "value": "/^$building$/" }
+            ]
+          }
+        ],
+        "yaxes": [
+          { "format": "lux", "label": "lux", "show": true },
+          { "format": "short", "show": false }
+        ],
+        "lines": true,
+        "linewidth": 2,
+        "fill": 1,
+        "legend": { "show": true, "avg": true, "max": true, "min": true, "values": true }
       }
     ],
-    "templating": {
-      "list": []
-    },
     "time": {
       "from": "now-6h",
       "to": "now"
