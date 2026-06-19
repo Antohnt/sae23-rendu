@@ -65,7 +65,6 @@ echo "$MESSAGES" | while read -r LINE; do
         # save measure
         mysql -u "$DB_USER" -p"$DB_PASS" "$DB_BASE" -e \
             "INSERT INTO Mesure (valeur, date_mesure, heure_mesure, id_capteur) VALUES ('$VALEUR', '$DATE_JOUR', '$HEURE', '$ID_CAPTEUR')"
-
     done
 
 done
