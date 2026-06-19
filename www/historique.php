@@ -128,9 +128,6 @@ mysqli_close($connexion);
                 <option value="humidity"     <?php if ($filtre_type == 'humidity')     echo 'selected'; ?>>Humidite</option>
                 <option value="co2"          <?php if ($filtre_type == 'co2')          echo 'selected'; ?>>CO2</option>
                 <option value="illumination" <?php if ($filtre_type == 'illumination') echo 'selected'; ?>>Luminosite</option>
-                <option value="activity"     <?php if ($filtre_type == 'activity')     echo 'selected'; ?>>Activite</option>
-                <option value="tvoc"         <?php if ($filtre_type == 'tvoc')         echo 'selected'; ?>>TVOC</option>
-                <option value="pressure"     <?php if ($filtre_type == 'pressure')     echo 'selected'; ?>>Pression</option>
             </select>
 
             <input type="submit" value="Filtrer">
