@@ -27,7 +27,6 @@ if [ -z "$MESSAGES" ]; then
     exit 0
 fi
 
-
 echo "$MESSAGES" | while read -r LINE; do
     if [ -z "$LINE" ]; then
         continue
