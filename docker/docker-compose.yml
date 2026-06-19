@@ -5,19 +5,6 @@
 version: "3.8"
 
 services:
-  # MQTT Broker
-  mosquitto:
-    image: eclipse-mosquitto:2
-    container_name: sae23-mosquitto
-    restart: always
-    ports:
-      - "1883:1883"
-      - "9001:9001"
-    volumes:
-      - ./mosquitto/config:/mosquitto/config
-      - ./mosquitto/data:/mosquitto/data
-      - ./mosquitto/log:/mosquitto/log
-
   # Time-series database
   influxdb:
     image: influxdb:1.8
