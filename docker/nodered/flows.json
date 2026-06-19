@@ -62,15 +62,20 @@
     {
         "id": "broker-local",
         "type": "mqtt-broker",
-        "name": "Mosquitto local",
-        "broker": "mosquitto",
-        "port": "1883",
+        "name": "Broker IUT",
+        "broker": "mqtt.iut-blagnac.fr",
+        "port": "8883",
         "clientid": "",
         "autoConnect": true,
-        "usetls": false,
+        "usetls": true,
+        "tls": "tls-iut",
         "protocolVersion": "4",
         "keepalive": "60",
         "cleansession": true,
+        "credentials": {
+            "user": "student",
+            "password": "student"
+        },
         "birthTopic": "",
         "birthQos": "0",
         "birthPayload": "",
@@ -84,6 +89,19 @@
         "willPayload": "",
         "willMsg": {},
         "sessionExpiry": ""
+    },
+    {
+        "id": "tls-iut",
+        "type": "tls-config",
+        "name": "TLS IUT",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false
     },
     {
         "id": "config-influx",
